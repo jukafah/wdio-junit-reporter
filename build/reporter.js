@@ -175,7 +175,7 @@ var JunitReporter = function (_events$EventEmitter) {
                             return item.toLowerCase().indexOf(test.title.toLowerCase()) > 0;
                         });
                         testCase.failure();
-                        testCase.standardError('\n[[ATTACHMENT|' + screenshot + ']]\n\n' + testData.error.stack);
+                        testCase.standardError(testData.error.step + '\n[[ATTACHMENT|' + screenshot + ']]\n\n' + testData.error.stack);
                     }
                 };
 
@@ -202,11 +202,11 @@ var JunitReporter = function (_events$EventEmitter) {
     }, {
         key: 'parseSteps',
         value: function parseSteps(test) {
-
             var testData = {
                 steps: [],
                 state: '',
                 error: {
+                    step: '',
                     message: '',
                     stack: ''
                 }
@@ -226,6 +226,7 @@ var JunitReporter = function (_events$EventEmitter) {
                     testData.state = step.state === 'pending' ? 'fail' : step.state;
 
                     if (step.error) {
+                        testData.error.step = step.title;
                         testData.error.message = step.error.message;
                         testData.error.stack = step.error.stack;
                     }
